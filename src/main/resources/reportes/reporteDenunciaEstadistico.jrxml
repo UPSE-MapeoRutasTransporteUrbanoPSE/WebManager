@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteDenunciaEstadistico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a98812f-7629-48ca-aba8-d4b9df320a06">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nombreCooperativa" class="java.lang.String"/>
+	<field name="valor" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="70" y="10" width="404" height="30" uuid="2149e54f-edfa-492f-968e-c779855da0ad"/>
+				<textElement textAlignment="Center">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE ESTADISTICO COOPERATIVA]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="255" splitType="Stretch">
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="80" y="0" width="400" height="250" uuid="b770cce6-bbe4-4a29-bbd2-cbaa776cbcc6"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{nombreCooperativa}]]></keyExpression>
+					<valueExpression><![CDATA[$F{valor}]]></valueExpression>
+					<labelExpression><![CDATA[$F{valor}+""]]></labelExpression>
+					<otherLabelExpression><![CDATA[]]></otherLabelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</pageFooter>
+</jasperReport>

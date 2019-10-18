@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0fb47060-5329-48c7-8d4b-bd5c7a4cbd8c">
+	<parameter name="ReportTitle" class="java.lang.String"/>
+	<parameter name="Author" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="subjectName" class="java.lang.String">
+		<fieldDescription><![CDATA[subjectName]]></fieldDescription>
+	</field>
+	<field name="marks" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[marks]]></fieldDescription>
+	</field>
+	<title>
+		<band height="70" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="515" height="1" uuid="4409c645-e93c-4a69-9d6a-234758343015"/>
+			</line>
+			<textField isBlankWhenNull="true" bookmarkLevel="1">
+				<reportElement x="0" y="10" width="515" height="30" uuid="b6b12d4f-6e88-4fdf-8c07-13fffdb6366e"/>
+				<textElement textAlignment="Center">
+					<font size="22"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
+				<anchorNameExpression><![CDATA["Title"]]></anchorNameExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="40" width="515" height="20" uuid="831106cc-8d16-4c7c-a2b1-d5db3e9c34f8"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Author}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="3" width="535" height="15" backcolor="#70A9A9" uuid="93dc65ea-4761-4e70-a10e-47229411158b"/>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="3" width="121" height="15" uuid="964f3a13-32dc-4cdf-a631-1586742822a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marks]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="136" height="15" uuid="18935560-7716-4e40-95b2-992cd8b73446"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subject]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="535" height="14" backcolor="#E5ECF9" uuid="a075916d-b8b7-4ad3-89ef-61cc0faa8498"/>
+				<box>
+					<bottomPen lineWidth="0.25" lineColor="#CCCCCC"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="414" y="0" width="121" height="15" uuid="97d7c3b7-e766-4885-89f5-419417e64597"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subjectName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="136" height="15" uuid="4773b053-721a-4aa9-833f-0e89d08d0c00"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{marks}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="200" splitType="Stretch">
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="0" width="555" height="200" uuid="848f9dd9-caec-4d4f-a8fd-4da7715cd91b"/>
+					<chartTitle>
+						<titleExpression><![CDATA["My First JR Bar Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{subjectName}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{subjectName}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{marks}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowTickMarks="false">
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="400" splitType="Stretch">
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="135" y="0" width="270" height="300" uuid="85d8723d-5fab-407e-b1b2-07965d618f75"/>
+					<chartTitle>
+						<titleExpression><![CDATA["My First JR Pie Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{subjectName}]]></keyExpression>
+					<valueExpression><![CDATA[$F{marks}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</pageFooter>
+</jasperReport>

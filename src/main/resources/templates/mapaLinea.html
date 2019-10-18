@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>LINEAS EN EL MAPA</title>
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlzw2oyl1QeNM8fOEIsDB3X_73Z18PnOw&callback"></script>
+
+<link rel="stylesheet" th:href="@{/css/index.css}" type="text/css"
+	media="screen" />
+<link rel="stylesheet" th:href="@{/css/menu.css}" type="text/css"
+	media="screen" />
+</head>
+<body style="overflow-y: hidden; overflow-x: hidden;">
+	<nav class="navbar navbar-inverse" th:include="menu"
+		th:fragment="menuPag"></nav>
+	<form class="form-inline">
+		<div class="form-group ">
+			<button type="button" class="btn btn-primary" id="btnTodasLineas"
+				onclick="setInterval(ajaxBusesLineasPosicionActual,5000)">MOSTRAR</button>
+		</div>
+
+		<div class="input-group">
+			<label class="input-group-addon" id="lblPlaca">PLACA BUS :</label> <input
+				type="text" id="placa" name="placa" th:value="${placa}"
+				onKeyUp="mayusculaPlaca()" class="form-control input-xs"
+				placeholder="Ej: ABC-123" maxlength="8" />
+		</div>
+
+		<div class="form-group">
+			<button type="button" class="btn btn-primary" id="btnMostrarLinea"
+				onclick="BusPosicionActual()">MOSTRAR</button>
+		</div>
+		<div class="form-group">
+			<button type="button" class="btn btn-primary" id="btnBusesLineas"
+				onclick="BusesPosicionActual()">TODOS</button>
+		</div>
+		<div class="form-group">
+			<div class="alert alert-danger" role="alert" id="alertaNoHayBusLinea"
+				style="display: none; padding: 7px; margin-bottom: 0px; font-weight: bolder; font-size: 15px; border: 0px;"
+				align="center">LIMPIAR</div>
+		</div>
+	</form>
+	<section class="contenido" th:include="mapa"></section>
+</body>
+
+
+
+
+
+<!--SCRIPT PARA EL MAPA DE GOOGLE-->
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var rutaJs = /*[[${ruta}]]*/"ruta";
+	var accedeLineaJs = /*[[${accedeLinea}]]*/"accedeLinea";
+	var colorJs = /*[[${color}]]*/"color";
+	var rutaListJs = new Array();
+	rutaListJs = /*[[${rutas}]]*/"rutas";
+	var colorListJs = new Array();
+	colorListJs = /*[[${colores}]]*/"colores";
+	var paradaJs = /*[[${parada}]]*/"parada";
+	var paradaListJs = new Array();
+	paradaListJs = /*[[${paradas}]]*/"paradas";
+	eval('var rutaObj=' + rutaJs);
+	eval('var paradaObj=' + paradaJs);	
+	eval('var colorObj=' + colorJs);
+	eval('var accedeObj=' + accedeLineaJs);
+	/*]]>*/
+
+	var mapa;
+	var markersParada = [];
+	var markersEstadoActual = [];
+	var markersEstadoActualBuses = [];
+	var markersParadas = new Array();
+	var estadoActualBuses = new Array();
+	var estadoActualBusesLineas = new Array();
+	var intervalBus = null;
+	var intervalBuses = null;
+	var placaAnterior;
+	var imageLinea;
+	var placaAnterior;
+
+	window.onload = ocultarElemento;
+
+	function ocultarElemento() {
+		if (accedeObj != null) {
+			var btnTodasLineas = document.getElementById("btnTodasLineas");
+			btnTodasLineas.style.display = "none"
+		} else {
+			var lblPlaca = document.getElementById("lblPlaca");
+			var placa = document.getElementById("placa");
+			var btnBusesLineas = document.getElementById("btnBusesLineas");
+			var btnMostrarLinea = document.getElementById("btnMostrarLinea");
+			var btnNuevoMostrarBus = document
+					.getElementById("btnNuevoMostrarBus");
+			lblPlaca.style.display = "none"
+			placa.style.display = "none"
+			btnBusesLineas.style.display = "none"
+			btnMostrarLinea.style.display = "none"
+			btnNuevoMostrarBus.style.display = "none"
+		}
+	}
+
+	function mayusculaPlaca() {
+		document.getElementById("placa").value = document
+				.getElementById("placa").value.toUpperCase()
+	}
+
+	$(document).ready(function() {
+		$('.eBtn5').on('click', function(event) {
+			event.preventDefault();
+			var href = $(this).attr('href');
+
+			$.get(href, function(bus, status) {
+				$('#placa').val('')
+			});
+			$('#miModalMapaLinea').modal();
+		});
+
+		$("#myBtn").submit(function() {
+			$("#miModalBus").modal("hide");
+		});
+	});
+
+	function eliminarLimpiarMarkersBusesLinea() {
+		for (var i = 0; i < markersEstadoActualBuses.length; i++) {
+			markersEstadoActualBuses[i].setMap(null);
+		}
+		markersEstadoActualBuses = [];
+	}
+
+	function ajaxBusPosicionActual(placa) {
+		if (markersEstadoActualBuses.length > 0) {
+			eliminarLimpiarMarkersBusesLinea();
+		}
+		var json = {
+			"placa" : placa
+		};
+		$
+				.ajax({
+					type : "GET",
+					contentType : "application/json",
+					url : "/mapa/busPlaca",
+					async : true,
+					data : json,
+					success : function(estadoBus) {
+						if (!estadoBus.estadoActual) {
+							limpiarAlertaInnerHtml();
+							document.getElementById("alertaNoHayBusLinea").innerHTML += "NO EXISTE BUS";
+							alertaRoja();
+							stopIntervalBus();
+							if (markersEstadoActual.length > 0) {
+								eliminarLimpiarMarkersBus();
+							}
+						} else {
+							if (estadoBus.linea == 11) {
+								imageLinea = "https://img.icons8.com/color/48/000000/bus.png"
+							} else {
+								if (estadoBus.linea == 7) {
+									imageLinea = "https://img.icons8.com/ultraviolet/40/000000/bus.png"
+								} else {
+									imageLinea = "https://img.icons8.com/offices/30/000000/bus.png"
+								}
+							}
+
+							agregarMarcadorBusEstadoActualLinea(imageLinea,
+									estadoBus.estadoActual, estadoBus.linea,
+									estadoBus.cantidadUsuarios,
+									estadoBus.velocidad, estadoBus.placa,
+									estadoBus.disco, estadoBus.capacidad);
+							for (var i = 1; i < markersEstadoActual.length; i++) {
+								markersEstadoActual[i - 1].setMap(null);
+							}
+						}
+					},
+					error : function(e) {
+						console.log("ERROR: ", e);
+					}
+				});
+	}
+
+	function limpiarInputPlaca() {
+		$('#placa').val('');
+	}
+
+	function alertaRoja() {
+		$("#alertaNoHayBusLinea").fadeTo(4000, 500).slideUp(500, function() {
+			$("alertaNoHayBusLinea").slideUp(500);
+		});
+	}
+
+	function stopIntervalBus() {
+		clearInterval(intervalBus);
+		intervalBus = null;
+	}
+
+	function stopIntervalBuses() {
+		clearInterval(intervalBuses);
+		intervalBuses = null;
+	}
+
+	function limpiarAlertaInnerHtml() {
+		document.getElementById("alertaNoHayBusLinea").innerHTML = "";
+	}
+
+	function BusPosicionActual() {
+		var valor = $("#placa").val();
+
+		if (valor === '') {
+			limpiarAlertaInnerHtml();
+			document.getElementById("alertaNoHayBusLinea").innerHTML += "CAMPO VACIO...!!!";
+			alertaRoja();
+		} else {
+			if ((/^[A-Z]{3}\d{3,4}$/.test(valor))) {
+				if (intervalBuses != null) {
+					stopIntervalBuses();
+				}
+
+				if (placaAnterior != valor) {
+					placaAnterior = valor;
+					stopIntervalBus();
+					intervalBus = setInterval(function() {
+						ajaxBusPosicionActual(valor)
+					}, 5000);
+				}
+			} else {
+				limpiarAlertaInnerHtml();
+				document.getElementById("alertaNoHayBusLinea").innerHTML += "FORMATO NO VALIDO...!!!";
+				alertaRoja();
+				limpiarInputPlaca();
+			}
+		}
+	}
+
+	function BusesPosicionActual() {
+
+		if (intervalBus != null) {
+			stopIntervalBus();
+		}
+
+		if (intervalBuses == null) {
+			placaAnterior = null;
+			intervalBuses = setInterval(ajaxBusesPosicionActual, 5000)
+		}
+	}
+
+	function eliminarLimpiarMarkersBus() {
+		for (var i = 0; i < markersEstadoActual.length; i++) {
+			markersEstadoActual[i].setMap(null);
+		}
+		markersEstadoActual = [];
+	}
+
+	function ajaxBusesPosicionActual() {
+		if (markersEstadoActual.length > 0) {
+			eliminarLimpiarMarkersBus();
+		}
+
+		var valor = $("#placa").val();
+		$
+				.ajax({
+					type : "GET",
+					contentType : "application/json",
+					url : "/mapa/busesLinea",
+					async : true,
+					success : function(estadoActualBusesLinea) {
+						if (markersEstadoActualBuses.length > 0) {
+							eliminarLimpiarMarkersBusesLinea();
+							for (var h = 0; h < estadoActualBusesLinea.length; h++) {
+								if (estadoActualBusesLinea[h].linea == 11) {
+									imageLinea = "https://img.icons8.com/color/48/000000/bus.png"
+								} else {
+									if (estadoActualBusesLinea[h].linea == 7) {
+										imageLinea = "https://img.icons8.com/ultraviolet/40/000000/bus.png"
+									} else {
+										imageLinea = "https://img.icons8.com/offices/30/000000/bus.png"
+									}
+								}
+								agregarMarcadorBusesEstadoActualLinea(
+										imageLinea,
+										estadoActualBusesLinea[h].estadoActual,
+										estadoActualBusesLinea[h].linea,
+										estadoActualBusesLinea[h].cantidadUsuarios,
+										estadoActualBusesLinea[h].velocidad,
+										estadoActualBusesLinea[h].placa,
+										estadoActualBusesLinea[h].disco,
+										estadoActualBusesLinea[h].capacidad);
+							}
+
+						} else {
+							for (var h = 0; h < estadoActualBusesLinea.length; h++) {
+								if (estadoActualBusesLinea[h].linea == 11) {
+									imageLinea = "https://img.icons8.com/color/48/000000/bus.png"
+								} else {
+									if (estadoActualBusesLinea[h].linea == 7) {
+										imageLinea = "https://img.icons8.com/ultraviolet/40/000000/bus.png"
+									} else {
+										imageLinea = "https://img.icons8.com/offices/30/000000/bus.png"
+									}
+								}
+								agregarMarcadorBusesEstadoActualLinea(
+										imageLinea,
+										estadoActualBusesLinea[h].estadoActual,
+										estadoActualBusesLinea[h].linea,
+										estadoActualBusesLinea[h].cantidadUsuarios,
+										estadoActualBusesLinea[h].velocidad,
+										estadoActualBusesLinea[h].placa,
+										estadoActualBusesLinea[h].disco,
+										estadoActualBusesLinea[h].capacidad);
+							}
+						}
+					},
+					error : function(e) {
+						console.log("ERROR: ", e);
+					}
+				});
+
+	}
+
+	function ajaxBusesLineasPosicionActual() {
+		$
+				.ajax({
+					type : "GET",
+					contentType : "application/json",
+					url : "/mapa/busesLineas",
+					async : true,
+					success : function(estadoActualBusesLineas) {
+						if (markersEstadoActualBuses.length > 0) {
+							for (var j = 0; j < markersEstadoActualBuses.length; j++) {
+								markersEstadoActualBuses[j].setMap(null);
+							}
+							markersEstadoActualBuses = [];
+							for (var h = 0; h < estadoActualBusesLineas.length; h++) {
+								if (estadoActualBusesLineas[h].linea == 11) {
+									imageLinea = "https://img.icons8.com/color/48/000000/bus.png"
+								} else {
+									if (estadoActualBusesLineas[h].linea == 7) {
+										imageLinea = "https://img.icons8.com/ultraviolet/40/000000/bus.png"
+									} else {
+										imageLinea = "https://img.icons8.com/offices/30/000000/bus.png"
+									}
+								}
+								agregarMarcadorBusesEstadoActualLinea(
+										imageLinea,
+										estadoActualBusesLineas[h].estadoActual,
+										estadoActualBusesLineas[h].linea,
+										estadoActualBusesLineas[h].cantidadUsuarios,
+										estadoActualBusesLineas[h].velocidad,
+										estadoActualBusesLineas[h].placa,
+										estadoActualBusesLineas[h].disco,
+										estadoActualBusesLineas[h].capacidad);
+								imageLinea = null;
+							}
+
+						} else {
+							for (var h = 0; h < estadoActualBusesLineas.length; h++) {
+								if (estadoActualBusesLineas[h].linea == 11) {
+									imageLinea = "https://img.icons8.com/color/48/000000/bus.png"
+								} else {
+									if (estadoActualBusesLineas[h].linea == 7) {
+										imageLinea = "https://img.icons8.com/ultraviolet/40/000000/bus.png"
+									} else {
+										imageLinea = "https://img.icons8.com/offices/30/000000/bus.png"
+									}
+								}
+								agregarMarcadorBusesEstadoActualLinea(
+										imageLinea,
+										estadoActualBusesLineas[h].estadoActual,
+										estadoActualBusesLineas[h].linea,
+										estadoActualBusesLineas[h].cantidadUsuarios,
+										estadoActualBusesLineas[h].velocidad,
+										estadoActualBusesLineas[h].placa,
+										estadoActualBusesLineas[h].disco,
+										estadoActualBusesLineas[h].capacidad);
+							}
+						}
+					},
+					error : function(e) {
+						console.log("ERROR: ", e);
+					}
+				});
+	}
+
+	function initMap() {
+		var opciones = {
+			zoom : 15,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		};
+		mapa = new google.maps.Map(document.getElementById('mapa_content'),
+				opciones);
+
+		if (navigator.geolocation) {
+			if (rutaJs == null && paradaJs == null && rutaListJs == null) {
+				navigator.geolocation.getCurrentPosition(mostrarLocalizacion,
+						manejadorDeError);//CALLBACK A LA FUNCION MOSTRAR LOCALZACION
+			} else {
+				navigator.geolocation.getCurrentPosition(
+						mostrarLocalizacionRuta, manejadorDeError);
+				
+				if (rutaListJs != null) {
+					for (i = 0; i < rutaListJs.length; i++) {
+						dibujaRutaLineaLista(eval(rutaListJs[i]),
+								eval(colorListJs[i]));				
+					}				
+					for (var j = 0; j < paradaListJs.length; j++) {						
+						dibujaParadasLineas(eval(paradaListJs[j]));							
+					}
+													
+					console.log('hay 11 ',eval(paradaListJs[1]));
+					console.log('hay 7 ',eval(paradaListJs[2]));
+					console.log('hay 8 ',eval(paradaListJs[3]));
+					
+				} else {
+					dibujaRutaLinea(colorObj);
+					dibujaParadaLinea();
+				}
+			}
+		} else {
+			alert("SU NAVEGADOR NO SOPORTA GEOLOCALIZACION");//CASO CONTRARIO SE MUESTRA EL ERROR
+		}
+
+	}
+
+	function dibujaParadaLinea() {
+		for (i = 0; i < paradaObj.length; i++) {
+			agregarMarcadorParadaLinea(paradaObj[i]);
+		}
+		console.log('hay',paradaObj);
+	}
+	
+	function dibujaParadasLineas(paradaLaLng) {
+		for (i = 0; i < paradaLaLng.length; i++) {
+			agregarMarcadorParadasLineas(paradaLaLng[i]);
+		}
+	}
+
+	var contenInfoWindow = '<div class="info">' + '<h2>BUS PARADA</h2>'
+			+ '<div class="contenidoInfo">' + '<p>PARADA LINEA 7 </p>'
+			+ '</div>' + '</div>';
+
+	var infowindow = new google.maps.InfoWindow({
+		content : contenInfoWindow
+	});
+
+	
+	
+	
+	function agregarMarcadorParadaLinea(latlng) {
+		var marker = new google.maps.Marker({
+			position : latlng,
+			map : mapa,
+			easing : "easeOutExpo",
+			icon : "https://img.icons8.com/color/48/000000/stop.png"
+		});
+		marker.addListener('click', function() {
+			infowindow.open(mapa, marker);
+		});
+		markersParada.push(marker);
+	}
+	
+	function agregarMarcadorParadasLineas(latlng) {		
+		var marker = new google.maps.Marker({
+			position : latlng,
+			map : mapa,
+			easing : "easeOutExpo",
+			icon : "https://img.icons8.com/color/48/000000/stop.png"
+		});
+		marker.addListener('click', function() {
+			infowindow.open(mapa, marker);
+		});
+		markersParadas.push(marker);
+	}
+
+	function agregarMarcadorBusEstadoActualLinea(imageLinea, latlng, linea,
+			usuario, velocidad, placa, disco, capacidad) {
+		var contenInfoWindowBusEstadoActual = '<div class="info">'
+				+ '<h2>DISCO  ' + disco + '</h2>'
+				+ '<div class="contenidoInfo">' + '<p><strong>PLACA: </strong>'
+				+ placa + '</p>' + '<p><strong>LINEA: </strong>' + linea
+				+ '</p>' + '<p><strong>USUARIOS: </strong>' + usuario + '</p>'
+				+ '<p><strong>VELOCIDAD: </strong>' + velocidad + '</p>'
+				+ '<p><strong>CAPACIDAD: </strong>' + capacidad + '</p>'
+				+ '</div>' + '</div>';
+		var infowindowBusEstadoActual = new google.maps.InfoWindow({
+			content : contenInfoWindowBusEstadoActual
+		});
+		eval('var latlngobj=' + latlng);
+		var marker = new google.maps.Marker({
+			position : latlngobj,
+			map : mapa,
+			easing : "easeOutExpo",
+			icon : imageLinea
+		});
+		google.maps.event.addListener(marker, 'mouseover', function() {
+			infowindowBusEstadoActual.open(mapa, marker);
+		});
+		google.maps.event.addListener(marker, 'mouseout', function() {
+			infowindowBusEstadoActual.close();
+		});
+		markersEstadoActual.push(marker);
+	}
+
+	
+	
+		
+	function agregarMarcadorBusesEstadoActualLinea(imageLinea, latlng, linea,
+			usuario, velocidad, placa, disco, capacidad) {
+		var contenInfoWindowBusesEstadoActual = '<div class="info">'
+				+ '<h2>DISCO  ' + disco + '</h2>'
+				+ '<div class="contenidoInfo">' + '<p><strong>PLACA: </strong>'
+				+ placa + '</p>' + '<p><strong>LINEA: </strong>' + linea
+				+ '</p>' + '<p><strong>USUARIOS: </strong>' + usuario + '</p>'
+				+ '<p><strong>VELOCIDAD: </strong>' + velocidad + '</p>'
+				+ '<p><strong>CAPACIDAD: </strong>' + capacidad + '</p>'
+				+ '</div>' + '</div>';
+		var infowindowBusesEstadoActual = new google.maps.InfoWindow({
+			content : contenInfoWindowBusesEstadoActual
+		});
+		eval('var latlngobj=' + latlng);
+		var marker = new google.maps.Marker({
+			position : latlngobj,
+			map : mapa,
+			easing : "easeOutExpo",
+			/* icon: {
+			  url: "https://img.icons8.com/ios/30/000000/bus.png",	
+			  scale: 5, //tamaño
+			  strokeColor: "#F1C40F", //color del borde
+			  strokeWeight: 5, //grosor del borde
+			  fillColor: "#9B59B6", //color de relleno
+			  fillOpacity:1,// opacidad del rellen
+			  background:"#9B59B6"
+			},  */
+			icon : imageLinea,
+
+		});
+		google.maps.event.addListener(marker, 'mouseover', function() {
+			infowindowBusesEstadoActual.open(mapa, marker);
+		});
+		google.maps.event.addListener(marker, 'mouseout', function() {
+			infowindowBusesEstadoActual.close();
+		});
+		markersEstadoActualBuses.push(marker);
+	}
+
+	function dibujaRutaLineaLista(rutasListaObj, colorListaObj) {
+		var flightPath = new google.maps.Polyline({
+			path : rutasListaObj,
+			geodesic : true,
+			strokeColor : colorListaObj,
+			strokeOpacity : 1.0,
+			strokeWeight : 2
+		});
+		flightPath.setMap(mapa);
+	}
+
+	function dibujaRutaLinea(colorObj) {
+		console.log('tiene', rutaObj.lenght);
+		var flightPath = new google.maps.Polyline({
+			path : rutaObj,
+			geodesic : true,
+			strokeColor : colorObj,
+			strokeOpacity : 1.0,
+			strokeWeight : 2
+		});
+		flightPath.setMap(mapa);
+	}
+
+	function mostrarLocalizacionRuta() {
+		navigator.geolocation.getCurrentPosition(function(pos) {
+			var pos = new google.maps.LatLng(-2.231361, -80.878721);// OBTENEMOS LAS COORDENADAS DE LA POSICION ACTUAL			
+			mapa.setCenter(pos);//MUESTRA LA POSICION EN EL CENTRO DEL MAPA					  
+		})
+	}
+
+	//MUESTRA LA POSICION ACTUAL DEL DISPOSITIVO
+	function mostrarLocalizacion() {
+		navigator.geolocation.getCurrentPosition(function(pos) {
+			var pos = new google.maps.LatLng(pos.coords.latitude,
+					pos.coords.longitude);// OBTENEMOS LAS COORDENADAS DE LA POSICION ACTUAL
+			var infowindow = new google.maps.InfoWindow({
+				map : mapa,
+				position : pos,
+				content : 'ESTAS AQUI'
+			});//MUESTRO UN TOOLTIP CON UN MENSAJE SOBRE EL MAPA
+			mapa.setCenter(pos);//MUESTRA LA POSICION EN EL CENTRO DEL MAPA					  
+		})
+	}
+
+	//FUNCION DE ERRORES AL MOSTRAR LA POSICION ACTUAL
+	function manejadorDeError(error) {
+
+		switch (error.code) {
+		case error.PERMISSION_DENIED:
+			alert("El usuario no permite compartir datos de geolocalizacion");
+			break;
+
+		case error.POSITION_UNAVAILABLE:
+			alert("Imposible detectar la posicio actual");
+			break;
+
+		case error.TIMEOUT:
+			alert("La posicion debe recuperar el tiempo de espera");
+			break;
+
+		default:
+			alert("Error desconocido");
+			break;
+		}
+		var opciones = {
+			map : mapa,
+			position : new google.maps.LatLng(60, 105),
+			content : content
+		};
+		var infowindow = new google.maps.InfoWindow(opciones);
+		mapa.setCenter(opciones.position);
+	}
+
+	google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>GESTION ARCHIVO</title>
+</head>
+<body>
+	<div class="modal fade" id="miModalArchivo" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title" id="myModalLabel" align="center">SUBIR
+						ARCHIVO</h2>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" action="#"
+						th:action="@{/archivo/subirArchivo}" method="post"
+						enctype="multipart/form-data">
+
+						<div class="form-group">
+							<div class="col-lg-10">
+								<input type="file" name="file" class="form-control"
+									accept=".gpx" required="required" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="text-align: left;" class="col-lg-2 control-label">LINEA:</label>
+							<div class="col-lg-3">
+								<input type="number" id="linea" name="linea" th:value="${linea}"
+									class="form-control" required placeholder="numero de linea"
+									maxlength="2">
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="text-align: left;" class="col-lg-2 control-label">COLOR
+							:</label>
+							<div class="col-lg-3">
+								<input type="color" id="color" name="color" th:value="${color}"
+									class="form-control" required placeholder="Color de Ruta">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">SALIR</button>
+							<input type="submit" value="Cargar" class="btn btn-primary" id="myBtn"/>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+<!-- SCRIPT DE FUNCION PARA IMPRIMIR -->
+<script th:inline="javascript">
+		
+$(document).ready(function(){
+		
+	    
+	    $("#myBtn").click(function(){
+	        $("#miModalArchivo").modal("hide");
+	    });
+	    $("#miModalArchivo").on('hidden.bs.modal', function () {
+	            alert("PROCESO EJECUTADO CON EXITO...!!")
+	    });
+
+	});
+</script>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<title>MENU PRINCIPAL</title>
+</head>
+<body>
+	<ul class="nav nav-pills" role="tablist">
+		<li><a href="#" th:href="@{/}"
+			style="color: #3b83bd; font-size: x-large; font-weight: 800;">MAPEO
+				RUTAS SANTA ELENA</a></li>
+		<li role="presentation" class="dropdown"><a href="#"
+			class="dropdown-toggle" id="drop4" data-toggle="dropdown"
+			role="button" aria-haspopup="true" aria-expanded="false"> INGRESO
+				<span class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" id="menu1" aria-labelledby="drop4">
+				<li><a href="#" th:href="@{/bus/listaBus}">Bus</a></li>
+				<li><a href="#" th:href="@{/cooperativa/listaCooperativa}">Cooperativa</a></li>
+				<!--<li><a href="#">Chofer</a></li>-->
+				<!--     <li role="separator" class="divider"></li>-->
+				<!--  <li><a href="#">Usuario</a></li>-->
+			</ul></li>
+		<li role="presentation" class="dropdown"><a href="#"
+			class="dropdown-toggle" id="drop5" data-toggle="dropdown"
+			role="button" aria-haspopup="true" aria-expanded="false"> SUBIR <span
+				class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" id="menu2" aria-labelledby="drop5">
+				<li><a href="#" data-target="#miModalArchivo"
+					data-toggle="modal">Archivo ruta GPX</a></li>
+				<!--<li role="separator" class="divider"></li>-->
+			</ul></li>
+		<li role="presentation" class="dropdown"><a href="#"
+			class="dropdown-toggle" id="drop6" data-toggle="dropdown"
+			role="button" aria-haspopup="true" aria-expanded="false"> RUTA <span
+				class="caret"></span>
+		</a>
+		
+		
+		
+			<ul class="dropdown-menu" id="menu3" aria-labelledby="drop6" >
+				<li><a href="#" th:href="@{/mapa/linea/(linea=7)}">Linea 7</a></li>
+				<li><a href="#" th:href="@{/mapa/linea/(linea=8)}">Linea 8</a></li>
+				<li><a href="#" th:href="@{/mapa/linea/(linea=11)}">Linea
+						11</a></li>
+				<li role="separator" class="divider"></li>
+				<li><a href="#" th:href="@{/mapa/lineas}" id="todasLineas" onclick="ocultar()">Todas</a></li>
+			</ul></li>
+		<li role="presentation" class="dropdown"><a href="#"
+			class="dropdown-toggle" id="drop7" data-toggle="dropdown"
+			role="button" aria-haspopup="true" aria-expanded="false">
+				REPORTES <span class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" id="menu4" aria-labelledby="drop7">
+				<li><a href="#" th:href="@{/reporteQueja/listaReporteQueja}">Denuncias</a></li>
+				<!--<li><a href="#">BUSES</a></li>-->
+				<!--<li><a href="#">COOPERATIVA</a></li>-->
+			</ul></li>
+		<li role="presentation" class="dropdown"><a
+			href="http://facsistel.upse.edu.ec:5601/app/kibana#/dashboard/8bba9120-c3a9-11e9-987e-e78c6a5f7065?_g=(refreshInterval:(pause:!f,value:5000),time:(from:now-15m,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(mapCenter:!(-2.227946324781536,-80.90769767761232),mapZoom:14),gridData:(h:25,i:'1',w:48,x:0,y:0),id:'66b5f180-c3a9-11e9-987e-e78c6a5f7065',panelIndex:'1',type:visualization,version:'7.0.0')),query:(language:kuery,query:''),timeRestore:!f,title:'Sistema%20de%20Mapeo%20y%20Visualizaci%C3%B3n%20de%20Buses%20Urbanos%20en%20la%20Pen%C3%ADnsula%20de%20Santa%20Elena.',viewMode:view)"
+			target="_blank"> MAPA CALOR</a></li>
+	</ul>
+</body>
+
+<script type="text/javascript">
+
+
+
+</script>
+</html>

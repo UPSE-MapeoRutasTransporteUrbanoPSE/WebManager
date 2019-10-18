@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>GESTION COOPERATIVA</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" th:href="@{/css/menu.css}" type="text/css"
+	media="screen" />
+
+<script type="text/javascript" th:src="@{/js/funcionJs.js}"
+	src="/js/funcionJs.js"></script>
+</head>
+<body>
+
+	<!-- PARA MOSTRAR EL MENU EN TODAS LAS SECCIONES -->
+	<header th:replace="/index :: menuPag"> </header>
+
+	<!-- ***************************************** FORMULARIO DE LISTA DE QUEJAS ****************************************** -->
+	<div class="container">
+		<div class="card">
+			<div class="modal-header">
+			<!-- <form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Password</label>
+      <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Address 2</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">State</label>
+      <select id="inputState" class="form-control">
+        <option selected>Choose...</option>
+        <option>...</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Sign in</button>
+</form> -->
+			
+			
+			
+			
+				<h2 class="modal-title" id="myModalLabel" align="center">DENUNCIAS
+					DE USUARIOS</h2>
+				<br>
+
+				<form class="form-horizontal" role="form" action="#"
+					th:action="@{/reporteQueja/consultafiltro}" method="get">						
+						<div class="form-group">
+						<label class="control-label col-sm-0">SELECCIONE UNA COOPERATIVA
+								:</label>
+						<label class="control-label col-sm-7">SELECCIONE UNA FECHA
+							:</label>
+						</div>
+							
+				
+					
+					<div class="row">
+						<div class="col-sm-3">
+							<label class="control-label">DESDE :</label> <input id="desde"
+								type="date" name="desde" th:value="${desde}"
+								class="form-control" style="width: 160px" />
+						</div>
+
+						<div class="col-sm-4">
+							<label style="text-align: left;" class="col-lg-0 control-label">HASTA
+								:</label> <input id="hasta" type="date" name="hasta" th:value="${hasta}"
+								class="form-control" style="width: 160px" />
+						</div>
+
+						<div class="col-sm-3">
+							<label style="text-align: left;" class="col-lg-0 control-label">COOPERATIVA
+								: </label> <select id="idCooperativa" name="idCooperativa"
+								th:value="${idCooperativa}" class="form-control"
+								style="width: 250px" title="Seleccione cooperativa">
+								<option value="">--</option>
+								<option th:each="coo : ${listaCooperativa}" th:value="${coo.id}"
+									th:utext="${coo.nombre}" />
+							</select>
+						</div>
+					</div>
+
+
+					<div align="right">
+
+						<button type="submit" class="btn btn-primary">
+							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+							CONSULTAR
+						</button>
+
+					</div>
+				</form>
+			</div>
+
+
+
+			<div class="modal-body" style="overflow-y: scroll; height: 400px">
+				<div class="table-responsive table-wrapper-scroll-y">
+					<table class="table table-hover table-bordered table-striped">
+						<thead>
+							<tr>
+								<th class="text-center">#</th>
+								<th class="text-center">ASUNTO</th>
+								<th class="text-center">NUMERO DISCO</th>
+								<th class="text-center">UBICACION</th>
+								<th class="text-center">FECHA</th>
+								<th class="text-center">COOPERATIVA</th>
+								<th class="text-center">MENSAJE</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="q : ${listaQueja}" align="center">
+								<td th:text="${q.orden}" style="font-weight: bold;"></td>
+								<td th:text="${q.asunto}"></td>
+								<td th:text="${q.numeroDisco}"></td>
+								<td th:text="${q.ubicacion}"></td>
+								<td th:text="${q.fecha}"></td>
+								<td th:text="${q.nombreCooperativa}"></td>
+								<td th:text="${q.mensaje}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+
+				<div align="right">
+					<a href="#" th:href="@{/reporteQueja/listaReporteQuejaPdf}"
+						target="_blank">
+						<button type="button" class="btn btn-primary">
+							<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+							PDF
+						</button>
+					</a>
+
+
+					<!-- <a href="" onclick="openNewWindowForJasperWithCharts();">Generate Report</a> -->
+
+					<a href="#"
+						th:href="@{/reporteQuejaGraph/listaReporteQuejaCooperativaPdfGraph}"
+						target="_blank">
+						<button type="button" class="btn btn-primary">
+							<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+							PDFGRAPH
+						</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- DIV PARA MOSTRAR MODALES SOBRE ESTe HTML-->
+<div class="modal-dialog" th:include="/gestion/gestionArchivo"></div>
+
+<!-- SCRIPT DE FUNCION PARA IMPRIMIR -->
+<script th:inline="javascript">
+	function myFunction() {
+		window.print();
+	}
+
+	function openNewWindowForJasperWithCharts() {
+		var url = "/reporteQuejaGraph/generarPdfGraph";
+		var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+		window.open(url, "_blank", "location=0,height=500,width=800");
+	}
+</script>
+</html>

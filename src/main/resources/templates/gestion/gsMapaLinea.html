@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>GESTION RUTAS</title>
+</head>
+<body>
+	<form class="form-horizontal" role="form" action="#"
+		th:action="@{/mapa/linea}" method="get">
+		<div class="modal fade" id="miModalMapaLinea1" tabindex="-1"
+			role="dialog" data-backdrop="static" data-keyboard="false"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title" id="myModalLabel" align="center">RUTAS
+							DE LAS LINEAS DE BUSES</h2>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="form-group">
+							<label style="text-align: left;" class="col-lg-5 control-label">PLACA BUS</label>
+							<div class="col-lg-6">
+								<input type="text" id="placa" name="placa" th:value="${placa}"
+									class="form-control" required placeholder="Ej: ABC-123"
+									maxlength="8" pattern="[A-Z]{3}\d{3,4}"
+									title="EJ: ABC-123 / ABC-1234" />
+							</div>
+						</div>
+						<div class="form-group">
+								<label style="text-align: left;" class="col-lg-5 control-label">LINEA</label>
+								<div class="col-lg-6">
+									<input type="number" id="linea" name="linea"
+										th:value="${linea}" class="form-control" required
+										placeholder="Ej: 01" maxlength="2" min="1" max="99"
+										title="NUMERO ENTERO EJ: 1-99" />
+								</div>
+							</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">SALIR</button>
+							<button type="submit" class="btn btn-primary" id="myBtn1" >
+								MAPA</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+<!-- SCRIPT DE FUNCION PARA IMPRIMIR -->
+<script th:inline="javascript">
+	$('.eBtn51').on('click', function(event) {
+		event.preventDefault();
+		var href = $(this).attr('href');
+
+		$.get(href, function(bus, status) {
+			$('#placa').val('')
+		});
+		$('#miModalMapaLinea1').modal();
+	});
+
+	$(document).ready(function() {
+
+		$("#myBtn1").click(function() {
+			$("#miModalMapaLinea1").modal("hide");
+		});
+	});
+	
+	
+	
+	function linea(){		
+		$("#myBtn1").click(function() {
+	        var input = {
+	          "linea": $("#linea").val(),
+	          
+	        };
+	        var inputStr = JSON.stringify(input);
+	        alert(inputStr);
+	        $.ajax({
+	          url: "/mapa/busPlaca",
+	          method: "GET",
+	          data: inputStr,
+	          dataType: "jsonp",
+	          success: function(output) { // callback method for further manipulations
+	            var str = JSON.stringify(output);
+	            $("#").html(data);
+	          },
+	          error: function(data) { // if error occured
+	            $("#error").text(data);
+	          }
+	        });
+
+	      });
+	}
+</script>
+</html>

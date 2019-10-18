@@ -1,0 +1,195 @@
+<!DOCTYPE html >
+<html lang="es-Es" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="ISO-8859-1"/>
+<meta charset="encoding"/>
+<meta http-equiv="Content-Type" content="text/html;">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>GESTION BUS</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" th:href="@{/css/menu.css}" type="text/css" media="screen" />
+
+</head>
+<body>
+<!-- PARA MOSTRAR EL MENU EN TODAS LAS SECCIONES -->
+	<header th:replace="/index :: menuPag"> </header>	
+<div class="container">
+<div class="pb-2 mt-4 mb-2 border-bottom">
+  <h1 class="text-center">LISTA DE BUSES</h1>  
+</div>
+
+<div class="pb-2 mt-4 mb-2 border-bottom">
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+		<tr>
+			<th class="text-center">#</th>
+			<th class="text-center">PLACA</th>
+			<th class="text-center">#DISCO</th>
+			<th class="text-center">CAPACIDAD</th>
+			<th class="text-center">COOPERATIVA</th>
+			<th class="text-center">ACCI&Oacute;N</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr th:each="bus : ${listaBus}">
+				<td th:text="${bus.orden}" class="text-center"></td>								
+				<td th:text="${bus.placa}" class="text-center" ></td>
+				<td th:text="${bus.numeroDisco}" class="text-center" ></td>
+				<td th:text="${bus.capacidad}" class="text-center" ></td>
+				<td th:text="${bus.nombreCooperativa}" class="text-center"></td>
+				<td class="text-center">
+					<a th:href="@{/bus/busByPlaca/(placa=__${bus.placa}__)}" class="btn btn-outline-secondary fa fa-pencil eBtn6">
+					</a>
+					<a href="#" th:href="@{/bus/eliminaBus?placa=__${bus.placa}__}">
+						<button type="button" class="btn btn-outline-danger fa fa-trash"></button>
+					</a>
+				</td>				
+			</tr>
+  </table>
+</div>
+</div>
+<div class="float-right">
+<a href="#" th:href="@{/bus/limpiaIdBus}" class="eBtn5">
+ <button type="button" class="btn btn-outline-primary"><i class="fa fa-plus" aria-hidden="true"></i>  NUEVO</button></a>
+</div>
+
+<form th:action="@{/bus/addBus}" th:object="${busModel}" method="post" class="form-horizontal">
+<!-- The Modal -->
+<div class="modal" id="miModalBus" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       <div class="form-group">
+			<label style="text-align: left;" class="col-lg-5 control-label">PLACA</label>
+				<div class="col-lg-6">
+					<input type="text" id="placa" name="placa" th:value="${placa}"
+						title="formato ABC-123 / XYZ-1234" class="form-control"
+						required placeholder="Ej: ABC-123" maxlength="8"
+						pattern="[A-Z]{3}[-]\d{3,4}">
+				</div>
+		</div>
+		<div class="form-group">
+			<label style="text-align: left;" class="col-lg-5 control-label">NUMERO</label>
+				<div class="col-lg-6">
+					<input type="number" id="numeroDisco" name="numeroDisco"
+					th:value="${numeroDisco}" class="form-control" required
+					placeholder="Ej: 01" maxlength="2"
+					title="Ingrese numero de bus" />
+				</div>
+		</div>
+		<div class="form-group">
+			<label style="text-align: left;" class="col-lg-5 control-label">CAPACIDAD</label>
+				<div class="col-lg-6">
+					<input type="number" id="capacidad" name="capacidad"
+					th:value="${capacidad}" class="form-control" required
+					placeholder="Ej: 01" title="Ingrese capacidad" />
+				</div>
+		</div>
+		<div class="form-group">
+			<label style="text-align: left;" class="col-lg-5 control-label">COOPERATIVA	</label>
+				<div class="col-lg-6">
+					<select id="idCooperativa" name="idCooperativa"
+					th:value="${idCooperativa}" class="form-control" required
+					title="Seleccione cooperativa">
+					<option value="">--</option>
+					<option th:each="coo : ${listaCooperativa}"
+					th:value="${coo.id}" th:utext="${coo.nombre}" />
+					</select>
+				</div>
+      </div>
+ 	</div>
+      <!-- Modal footer -->
+      <div class="modal-footer">        
+        <a href="#" th:href="@{/bus/limpiaIdBus}">
+			<button type="button" class="btn btn-danger" data-dismiss="modal">SALIR</button>							
+		</a>
+			<button type="submit" class="btn btn-outline-primary" id="myBtn"><i class="fa fa-floppy-disk" aria-hidden="true"></i>  GUARDAR</button>
+      </div>   
+  </div>
+</div>
+</div>
+</form>
+
+</div>
+
+</body>
+
+<div class="modal-dialog" th:include="/gestion/gestionArchivo"></div>
+
+<script th:inline="javascript">
+	$('.eBtn5').on('click',function(event){
+		event.preventDefault();
+		var href = $(this).attr('href');
+		
+		$.get(href, function(bus, status){
+			$('#placa').val('')
+			$('#numeroDisco').val('')
+			$('#capacidad').val('')
+			$('#idCooperativa').val('')			
+		});
+		$('#miModalBus').modal();
+	});
+			
+	$(document).ready(function () {
+		  $('input#numeroDisco')
+		    .keypress(function (event) {
+		      if (event.which < 48 || event.which > 57 || this.value.length === 2) {
+		        return false;
+		      }
+		    });
+		});
+	
+	$(document).ready(function () {
+		  $('input#capacidad')
+		    .keypress(function (event) {
+		      if (event.which < 48 || event.which > 57 || this.value.length === 2) {
+		        return false;
+		      }
+		    });
+		});
+	
+	$(document).ready(function(){		
+	    
+	    $("#myBtn").click(function(){
+	        $("#miModalBus").modal("hide");
+	    });
+	});
+	
+	
+	
+	$(document).ready(function(){
+		$('.eBtn6').on('click',function(event){
+			event.preventDefault();
+			var href = $(this).attr('href');
+			
+			$.get(href, function(bus, status){
+				$('.modal-body #placa').val(bus.placa)
+				$('.modal-body #numeroDisco').val(bus.numeroDisco)
+				$('.modal-body #capacidad').val(bus.capacidad)
+				$('.modal-body #idCooperativa').val(bus.idCooperativa)			
+			});
+			$('#miModalBus').modal();
+		});	
+	});	
+</script>
+</html>

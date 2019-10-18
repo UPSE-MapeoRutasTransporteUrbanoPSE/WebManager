@@ -1,0 +1,51 @@
+.contenido {
+	width: 100%;
+	height: 86%;
+	background: white;
+	position: static;
+	border-radius: 15px;
+}
+
+.logotipo {
+	position: relative;
+	height: 13%;
+	background-color: #335599;
+}
+
+.logotipo span {
+	color: white;
+	font-size: 40px;
+	font-family: Arial Black;
+	text-align: center;
+	line-height: 110%;
+}
+
+span {
+	color: white;
+	font-size: 40px;
+	font-family: Arial Black;
+}
+
+.css-serial {
+	counter-reset: serial-number; /* Set the serial number counter to 0 */
+}
+
+.css-serial td:first-child:before {
+	counter-increment: serial-number;
+	/* Increment the serial number counter */
+	content: counter(serial-number); /* Display the counter */
+}
+
+.form-group {
+	margin-bottom: 10px;
+}
+
+.form-inline {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.form-horizontal .form-group {
+	margin-right: 30px;
+	margin-left: 15px;
+}
