@@ -4,7 +4,7 @@
 <head>
 <meta charset="ISO-8859-1" />
 <meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" >
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>GESTION COOPERATIVA</title>
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -26,19 +26,17 @@
 	<header th:replace="/index :: menuPag"> </header>
 
 	<!-- ***************************************** FORMULARIO DE LISTA DE COOPERATIVA ****************************************** -->
-	
+
 	<div class="container">
 		<div class="card">
-
 			<div class="modal-header">
-				<h2 class="modal-title" id="myModalLabel" align="center">LISTA DE
-					COOPERATIVAS</h2>
+				<h2 class="modal-title" id="myModalLabel" align="center">LISTA
+					DE COOPERATIVAS</h2>
 			</div>
-			
 
 			<div class="modal-body" style="overflow-y: scroll;">
 				<div class="table-responsive table-wrapper-scroll-y">
-					<table class="table table-hover table-bordered table-striped" >
+					<table class="table table-hover table-bordered table-striped">
 						<thead>
 							<tr>
 								<th class="text-center">#</th>
@@ -58,7 +56,7 @@
 								<td th:text="${coop.direccion}"></td>
 								<td th:text="${coop.telefono}"></td>
 								<td th:text="${coop.email}"></td>
-								<td><a href="#"								
+								<td><a href="#"
 									th:href="@{/cooperativa/cooperativaById/(idCooperativa=${coop.id})}"
 									class="btn btn-default eBtn glyphicon glyphicon-pencil"> </a> <a
 									href="#"
@@ -71,12 +69,10 @@
 						</tbody>
 					</table>
 				</div>
-				</div>
 			</div>
-
 			<div class="modal-footer">
-
-				<a href="#" th:href="@{/cooperativa/limpiaIdCooperativa}" class="eBtn5">
+				<a href="#" th:href="@{/cooperativa/limpiaIdCooperativa}"
+					class="eBtn5">
 					<button type="button" class="btn btn-primary">
 						<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
 						NUEVO
@@ -84,108 +80,105 @@
 				</a>
 			</div>
 		</div>
+	</div>
 
 
+	<!-- ***************************************** FORMULARIO MODAL DE INGRESO DE COOPERATIVA ****************************************** -->
 
-		<!-- ***************************************** FORMULARIO MODAL DE INGRESO DE COOPERATIVA ****************************************** -->
 
+	<div class="Frm_GestionCooperativa">
+		<form method="post" action="#"
+			th:action="@{/cooperativa/addCooperativa}"
+			th:object="${cooperativaModel}" class="form-horizontal" role="form">
+			<div class="modal fade" id="miModalCooperativa" tabindex="-1"
+				data-backdrop="static" data-keyboard="false" role="dialog"
+				aria-labelledby="myModalLabel" aria-hidden="true"
+				th:fragment="modalContents">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
 
-		<div class="Frm_GestionCooperativa">
-			<form method="post" action="#"
-				th:action="@{/cooperativa/addCooperativa}"
-				th:object="${cooperativaModel}" class="form-horizontal" role="form">
-				<div class="modal fade" id="miModalCooperativa" tabindex="-1" data-backdrop="static" data-keyboard="false"
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-					th:fragment="modalContents">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
+						<div class="modal-header">
+							<h2 class="modal-title" id="myModalLabel" align="center">INGRESO
+								COOPERATIVA</h2>
+						</div>
 
-							<div class="modal-header">
-								<h2 class="modal-title" id="myModalLabel" align="center">INGRESO
-									COOPERATIVA</h2>
+						<div class="modal-body">
+
+							<div class="form-group">
+								<input type="hidden" id="id" name="id" th:value="${id}"
+									class="form-control">
 							</div>
 
-							<div class="modal-body">							
-							
-								<div class="form-group">
-										<input type="hidden" id="id" name="id"
-											th:value="${id}" class="form-control">
-								</div>								
-								
-								<div class="form-group">
-									<label style="text-align: left;" class="col-lg-2 control-label">NOMBRE</label>
-									<div class="col-lg-3">
-										<input type="text" id="nombre" name="nombre"
-											th:value="${nombre}" class="form-control" required
-											placeholder="Cooperativa" minlength="3" maxlength="100">
-									</div>
+							<div class="form-group">
+								<label style="text-align: left;" class="col-lg-2 control-label">NOMBRE</label>
+								<div class="col-lg-3">
+									<input type="text" id="nombre" name="nombre"
+										th:value="${nombre}" class="form-control" required
+										placeholder="Cooperativa" minlength="3" maxlength="100">
 								</div>
-								<div class="form-group">
-									<label style="text-align: left;" class="col-lg-2 control-label">DESCRIPCION</label>
-									<div class="col-lg-8">
-										<input type="text" id="descripcion" name="descripcion"
-											th:value="${descripcion}" class="form-control" required
-											placeholder="Descripcion Cooperativa" minlength="5">
-									</div>
-								</div>
-								<div class="form-group">
-									<label style="text-align: left;" class="col-lg-2 control-label">DIRECCION</label>
-									<div class="col-lg-8">
-										<input type="text" id="direccion" name="direccion"
-											th:value="${direccion}" class="form-control"
-											placeholder="La Libertad - barrio" minlength="5">
-									</div>
-								</div>
-								<div class="form-group">
-									<label style="text-align: left;" class="col-lg-2 control-label">TELEFONO</label>
-									<div class="col-lg-8">
-										<input type="tel" id="telefono" name="telefono"
-											th:value="${telefono}" class="form-control" required title="Ingrese un numero que contenga 9 digitos"
-											pattern="[0-9]{9}" placeholder="Ej: fijo: 042906114 / cel: 0999999999" maxlength="10">
-									</div>
-								</div>
-								<div class="form-group">
-									<label style="text-align: left;" class="col-lg-2 control-label">EMAIL</label>
-									<div class="col-lg-8">
-										<input type="email" id="email" name="email"
-											th:value="${email}" class="form-control" required
-											placeholder="Ej: esteban.tato@hotmail(outlook).com"
-											title="Ingrese email Ej: esteban.tato@hotmail(outlook).com">
-									</div>
-								</div>
-
 							</div>
-							
-							<div class="modal-footer">
-								<a href="#" th:href="@{/cooperativa/limpiaIdCooperativa}"
-									style="color: black">
-									<button type="button" class="btn btn-secondary">
-										<span class="glyphicon glyphicon-remove" aria-hidden="true"
-											style="color: red"></span> <b>SALIR</b>
-									</button>
-								</a>
-								<button type="submit" class="btn btn-primary" id="myBtn">
-									<span class="glyphicon glyphicon-floppy-disk"
-										aria-hidden="true" ></span> GUARDAR
+							<div class="form-group">
+								<label style="text-align: left;" class="col-lg-2 control-label">DESCRIPCION</label>
+								<div class="col-lg-8">
+									<input type="text" id="descripcion" name="descripcion"
+										th:value="${descripcion}" class="form-control" required
+										placeholder="Descripcion Cooperativa" minlength="5">
+								</div>
+							</div>
+							<div class="form-group">
+								<label style="text-align: left;" class="col-lg-2 control-label">DIRECCION</label>
+								<div class="col-lg-8">
+									<input type="text" id="direccion" name="direccion"
+										th:value="${direccion}" class="form-control"
+										placeholder="La Libertad - barrio" minlength="5">
+								</div>
+							</div>
+							<div class="form-group">
+								<label style="text-align: left;" class="col-lg-2 control-label">TELEFONO</label>
+								<div class="col-lg-8">
+									<input type="tel" id="telefono" name="telefono"
+										th:value="${telefono}" class="form-control" required
+										title="Ingrese un numero que contenga 9 digitos"
+										pattern="[0-9]{9}"
+										placeholder="Ej: fijo: 042906114 / cel: 0999999999"
+										maxlength="10">
+								</div>
+							</div>
+							<div class="form-group">
+								<label style="text-align: left;" class="col-lg-2 control-label">EMAIL</label>
+								<div class="col-lg-8">
+									<input type="email" id="email" name="email" th:value="${email}"
+										class="form-control" required
+										placeholder="Ej: esteban.tato@hotmail(outlook).com"
+										title="Ingrese email Ej: esteban.tato@hotmail(outlook).com">
+								</div>
+							</div>
+
+						</div>
+
+						<div class="modal-footer">
+							<a href="#" th:href="@{/cooperativa/limpiaIdCooperativa}"
+								style="color: black">
+								<button type="button" class="btn btn-secondary">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"
+										style="color: red"></span> <b>SALIR</b>
 								</button>
-							</div>
+							</a>
+							<button type="submit" class="btn btn-primary" id="myBtn">
+								<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+								GUARDAR
+							</button>
 						</div>
 					</div>
 				</div>
-			</form>
-		</div>	
+			</div>
+		</form>
+	</div>
 </body>
+<div class="modal-dialog" th:include="gestion/gestionArchivo"></div>
 
-<!-- DIV PARA MOSTRAR MODALES SOBRE ESTe HTML-->
-<div class="modal-dialog" th:include="/gestion/gestionArchivo"></div>
-
-<!-- SCRIPT DE FUNCION PARA IMPRIMIR -->
-<script th:inline="javascript">
-	function myFunction() {
-		window.print();
-	}
-
-	$('.eBtn5').on('click', function(event) {
+<script th:inline="javascript">	
+	$('.eBtn5').on('click', function(event) {	
 		event.preventDefault();
 		var href = $(this).attr('href');
 		$.get(href, function(coop, status) {
@@ -198,21 +191,11 @@
 		$('.Frm_GestionCooperativa #miModalCooperativa').modal();
 	});
 	
-$(document).ready(function(){
-		
-	    
+$(document).ready(function(){	    
 	    $("#myBtn").submit(function(){
 	        $("#miModalCooperativa").modal("hide");
 	    });
-	    $("#miModalCooperativa").on('hidden.bs.modal', function () {
-	            alert("PROCESO EJECUTADO CON EXITO...!!")
-	    });
 
-	});
-	
-	
-	
-$(document).ready(function () {
 	  $('input#telefono')
 	    .keypress(function (event) {
 	      if (event.which < 48 || event.which > 57) {

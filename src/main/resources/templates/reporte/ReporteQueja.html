@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
 <meta charset="ISO-8859-1" />
 <meta name="viewport"
@@ -9,6 +8,8 @@
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 	rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/css/reporte.css}" type="text/css"
+	media="screen" />
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script
@@ -20,188 +21,241 @@
 <script type="text/javascript" th:src="@{/js/funcionJs.js}"
 	src="/js/funcionJs.js"></script>
 </head>
-<body>
 
-	<!-- PARA MOSTRAR EL MENU EN TODAS LAS SECCIONES -->
+<body style="overflow-y: hidden; overflow-x: hidden;">
 	<header th:replace="/index :: menuPag"> </header>
 
-	<!-- ***************************************** FORMULARIO DE LISTA DE QUEJAS ****************************************** -->
 	<div class="container">
-		<div class="card">
-			<div class="modal-header">
-			<!-- <form>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">Email</label>
-      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Password</label>
-      <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="inputAddress">Address</label>
-    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-  </div>
-  <div class="form-group">
-    <label for="inputAddress2">Address 2</label>
-    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="inputCity">City</label>
-      <input type="text" class="form-control" id="inputCity">
-    </div>
-    <div class="form-group col-md-4">
-      <label for="inputState">State</label>
-      <select id="inputState" class="form-control">
-        <option selected>Choose...</option>
-        <option>...</option>
-      </select>
-    </div>
-    <div class="form-group col-md-2">
-      <label for="inputZip">Zip</label>
-      <input type="text" class="form-control" id="inputZip">
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="gridCheck">
-      <label class="form-check-label" for="gridCheck">
-        Check me out
-      </label>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Sign in</button>
-</form> -->
-			
-			
-			
-			
-				<h2 class="modal-title" id="myModalLabel" align="center">DENUNCIAS
-					DE USUARIOS</h2>
-				<br>
+		<div class="modal-header">
+			<h2 class="modal-title" id="myModalLabel" align="center">DENUNCIAS
+				DE USUARIOS</h2>
+			<br>
+			<form class="form-horizontal" role="form" action="#"
+				th:action="@{/reporteQueja/consultafiltro}" method="get">
 
-				<form class="form-horizontal" role="form" action="#"
-					th:action="@{/reporteQueja/consultafiltro}" method="get">						
-						<div class="form-group">
-						<label class="control-label col-sm-0">SELECCIONE UNA COOPERATIVA
-								:</label>
-						<label class="control-label col-sm-7">SELECCIONE UNA FECHA
-							:</label>
-						</div>
-							
-				
-					
-					<div class="row">
-						<div class="col-sm-3">
-							<label class="control-label">DESDE :</label> <input id="desde"
-								type="date" name="desde" th:value="${desde}"
-								class="form-control" style="width: 160px" />
-						</div>
-
-						<div class="col-sm-4">
-							<label style="text-align: left;" class="col-lg-0 control-label">HASTA
-								:</label> <input id="hasta" type="date" name="hasta" th:value="${hasta}"
-								class="form-control" style="width: 160px" />
-						</div>
-
-						<div class="col-sm-3">
-							<label style="text-align: left;" class="col-lg-0 control-label">COOPERATIVA
-								: </label> <select id="idCooperativa" name="idCooperativa"
-								th:value="${idCooperativa}" class="form-control"
-								style="width: 250px" title="Seleccione cooperativa">
-								<option value="">--</option>
-								<option th:each="coo : ${listaCooperativa}" th:value="${coo.id}"
-									th:utext="${coo.nombre}" />
-							</select>
-						</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="inputDateDesde">DESDE</label> <input
+							id="inputDateDesde" type="date" name="desde" th:value="${desde}"
+							class="form-control" />
 					</div>
-
-
-					<div align="right">
-
-						<button type="submit" class="btn btn-primary">
+					<div class="form-group col-md-3">
+						<label for="inputDateHasta">HASTA</label> <input
+							id="inputDateHasta" type="date" name="hasta" th:value="${hasta}"
+							class="form-control" />
+					</div>
+					<div class="form-group col-md-3">
+						<label for="selectCooperativa">COOPERATIVA</label> <select
+							id="selectCooperativa" name="idCooperativa"
+							th:value="${idCooperativa}" class="form-control"
+							title="Seleccione cooperativa">
+							<option value="">--</option>
+							<option th:each="coo : ${ListaCooperativa}" th:value="${coo.id}"
+								th:utext="${coo.nombre}" />
+						</select>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="inputDateHasta" style="visibility: hidden;">CONSULTAR</label>
+						<button type="button" class="btn btn-primary validarInput">
 							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-							CONSULTAR
+							BUSCAR
 						</button>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inputDateHasta" style="visibility: hidden;">CONSULTAR</label>
+						<div class="alert alert-danger" role="alert" id="alertaCampoVacio"
+							style="display: none; padding: 7px; margin-bottom: 0px; font-weight: bolder; font-size: 15px; border: 0px;"
+							align="center">LIMPIAR</div>
 
 					</div>
-				</form>
-			</div>
-
-
-
-			<div class="modal-body" style="overflow-y: scroll; height: 400px">
-				<div class="table-responsive table-wrapper-scroll-y">
-					<table class="table table-hover table-bordered table-striped">
-						<thead>
-							<tr>
-								<th class="text-center">#</th>
-								<th class="text-center">ASUNTO</th>
-								<th class="text-center">NUMERO DISCO</th>
-								<th class="text-center">UBICACION</th>
-								<th class="text-center">FECHA</th>
-								<th class="text-center">COOPERATIVA</th>
-								<th class="text-center">MENSAJE</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="q : ${listaQueja}" align="center">
-								<td th:text="${q.orden}" style="font-weight: bold;"></td>
-								<td th:text="${q.asunto}"></td>
-								<td th:text="${q.numeroDisco}"></td>
-								<td th:text="${q.ubicacion}"></td>
-								<td th:text="${q.fecha}"></td>
-								<td th:text="${q.nombreCooperativa}"></td>
-								<td th:text="${q.mensaje}"></td>
-							</tr>
-						</tbody>
-					</table>
 				</div>
+			</form>
+		</div>
+
+
+
+		<div class="modal-body" style="height: 400px;">
+			<div class="table-responsive">
+				<table
+					class="table table-hover table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th class="text-center col-sm-1">#</th>
+							<th class="text-center col-sm-2">ASUNTO</th>
+							<th class="text-center col-sm-1">DISCO</th>
+							<th class="text-center col-sm-2">UBICACION</th>
+							<th class="text-center col-sm-1">FECHA</th>
+							<th class="text-center col-sm-2">COOPERATIVA</th>
+							<th class="text-center col-sm-4">MENSAJE</th>
+						</tr>
+					</thead>
+					<tbody id="tbodyDenuncias">
+
+					</tbody>
+				</table>
 			</div>
-			<div class="modal-footer">
+		</div>
+		<div class="modal-footer">
 
-				<div align="right">
-					<a href="#" th:href="@{/reporteQueja/listaReporteQuejaPdf}"
-						target="_blank">
-						<button type="button" class="btn btn-primary">
-							<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-							PDF
-						</button>
-					</a>
+			<div align="right">
+				<a href="#" th:href="@{/reporteQueja/listaReporteQuejaPdf}"
+					target="_blank">
+					<button type="button" class="btn btn-primary" id="btnPDF">
+						<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+						PDF
+					</button>
+				</a>
 
 
-					<!-- <a href="" onclick="openNewWindowForJasperWithCharts();">Generate Report</a> -->
+				<!-- <a href="" onclick="openNewWindowForJasperWithCharts();">Generate Report</a> -->
 
-					<a href="#"
-						th:href="@{/reporteQuejaGraph/listaReporteQuejaCooperativaPdfGraph}"
-						target="_blank">
-						<button type="button" class="btn btn-primary">
-							<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-							PDFGRAPH
-						</button>
-					</a>
-				</div>
+				<a href="#"
+					th:href="@{/reporteQuejaGraph/listaReporteQuejaCooperativaPdfGraph}"
+					target="_blank">
+					<button type="button" class="btn btn-primary">
+						<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+						PDFGRAPH
+					</button>
+				</a>
 			</div>
+
 		</div>
 	</div>
 </body>
+<div class="modal-dialog" th:include="gestion/gestionArchivo"></div>
 
-<!-- DIV PARA MOSTRAR MODALES SOBRE ESTe HTML-->
-<div class="modal-dialog" th:include="/gestion/gestionArchivo"></div>
-
-<!-- SCRIPT DE FUNCION PARA IMPRIMIR -->
 <script th:inline="javascript">
-	function myFunction() {
-		window.print();
-	}
+	var btnPDF = document.getElementById("btnPDF");
 
 	function openNewWindowForJasperWithCharts() {
 		var url = "/reporteQuejaGraph/generarPdfGraph";
 		var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 		window.open(url, "_blank", "location=0,height=500,width=800");
+	}
+
+	window.onload = deshabilitaBotonPDF;
+
+	$('.validarInput')
+			.on(
+					'click',
+					function(event) {
+						event.preventDefault();
+						var inputDesde = $("#inputDateDesde").val();
+						var inputHasta = $("#inputDateHasta").val();
+						var cmbCooperativa = $("#selectCooperativa").val();
+
+						console.log('inputDesde ', inputDesde);
+						console.log('inputHasta ', inputHasta);
+						console.log('cmbCooperativa ', cmbCooperativa);
+
+						if (inputDesde === '' && inputHasta === ''
+								&& cmbCooperativa === '') {
+							ajaxListaCompleta();
+						} else {
+							if ((inputDesde === '' && inputHasta != '')
+									|| (inputHasta === '' && inputDesde != '')) {
+								limpiarAlertaInnerHtml();
+								document.getElementById("alertaCampoVacio").innerHTML += "LLENE CAMPO FECHA";
+								alertaRoja();
+							} else {
+								ajaxListaFiltro();
+							}
+
+						}
+					});
+
+	function alertaRoja() {
+		$("#alertaCampoVacio").fadeTo(4000, 500).slideUp(500, function() {
+			$("alertaCampoVacio").slideUp(500);
+		});
+	}
+
+	function limpiarAlertaInnerHtml() {
+		document.getElementById("alertaCampoVacio").innerHTML = "";
+	}
+
+	function deshabilitaBotonPDF() {
+		btnPDF.disabled = true;
+	}
+
+	function habilitaBotonPDF() {
+		btnPDF.disabled = false;
+	}
+
+	function ajaxListaCompleta() {
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : "/reporteQueja/listaReporteQueja",
+			success : function(listaCompleta) {
+				$("#tbodyDenuncias").empty()
+				habilitaBotonPDF();
+				for (var i = 0; i < listaCompleta.length; i++) { //cuenta la cantidad de registros
+					var nuevafila = '<tr><td class="text-center col-sm-1">'
+							+ listaCompleta[i].orden
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaCompleta[i].asunto
+							+ '</td><td class="text-center col-sm-1">'
+							+ listaCompleta[i].numeroDisco
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaCompleta[i].ubicacion
+							+ '</td><td class="text-center col-sm-1">'
+							+ listaCompleta[i].fechaString
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaCompleta[i].nombreCooperativa
+							+ '</td><td class="text-center col-sm-4">'
+							+ listaCompleta[i].mensaje + '</td></tr>'
+					$("#tbodyDenuncias").append(nuevafila)
+				}
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+			}
+		});
+	}
+
+	function ajaxListaFiltro() {
+		var inputDesde = $("#inputDateDesde").val();
+		var inputHasta = $("#inputDateHasta").val();
+		var cmbCooperativa = $("#selectCooperativa").val();
+
+		var json = {
+			"desde" : inputDesde,
+			"hasta" : inputHasta,
+			"idCooperativa" : cmbCooperativa
+		};
+
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : "/reporteQueja/consultafiltro",
+			data : json,
+			success : function(listaFiltro) {
+				$("#tbodyDenuncias").empty()
+				console.log('listaFiltro ', listaFiltro);
+				habilitaBotonPDF();
+				for (var i = 0; i < listaFiltro.length; i++) { //cuenta la cantidad de registros
+					var nuevafila = '<tr><td class="text-center col-sm-1">'
+							+ listaFiltro[i].orden
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaFiltro[i].asunto
+							+ '</td><td class="text-center col-sm-1">'
+							+ listaFiltro[i].numeroDisco
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaFiltro[i].ubicacion
+							+ '</td><td class="text-center col-sm-1">'
+							+ listaFiltro[i].fechaString
+							+ '</td><td class="text-center col-sm-2">'
+							+ listaFiltro[i].nombreCooperativa
+							+ '</td><td class="text-center col-sm-4">'
+							+ listaFiltro[i].mensaje + '</td></tr>'
+					$("#tbodyDenuncias").append(nuevafila)
+				}
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+			}
+		});
 	}
 </script>
 </html>

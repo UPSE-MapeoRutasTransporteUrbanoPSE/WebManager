@@ -35,7 +35,7 @@
 		<field name="asunto" class="java.lang.String"/>
 		<field name="numeroDisco" class="java.lang.Integer"/>
 		<field name="ubicacion" class="java.lang.String"/>
-		<field name="fecha" class="java.util.Date"/>
+		<field name="fechaString" class="java.lang.String"/>
 		<field name="mensaje" class="java.lang.String"/>
 		<field name="nombreCooperativa" class="java.lang.String"/>
 	</subDataset>
@@ -111,7 +111,7 @@
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="90" height="30" uuid="f04a74ce-35ca-493a-92c0-25c747358c46"/>
-								<textElement textAlignment="Left">
+								<textElement textAlignment="Center">
 									<font size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{asunto}]]></textFieldExpression>
@@ -153,7 +153,7 @@
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="90" height="30" uuid="3461a3be-7ffb-40c7-9978-4877adab8827"/>
-								<textElement textAlignment="Left">
+								<textElement textAlignment="Center">
 									<font size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{ubicacion}]]></textFieldExpression>
@@ -177,7 +177,7 @@
 								<textElement textAlignment="Center">
 									<font size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{fechaString}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -195,7 +195,7 @@
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="110" height="30" uuid="7a460e8c-220e-41cd-9c96-0406e1566d79"/>
-								<textElement>
+								<textElement textAlignment="Center">
 									<font size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{nombreCooperativa}]]></textFieldExpression>
@@ -216,7 +216,7 @@
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="80" height="30" uuid="cd7f2f55-92e8-4682-90bf-a57a8ed4aa90"/>
-								<textElement textAlignment="Left">
+								<textElement textAlignment="Center">
 									<font size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{mensaje}]]></textFieldExpression>

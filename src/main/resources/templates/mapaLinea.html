@@ -56,12 +56,8 @@
 	</form>
 	<section class="contenido" th:include="mapa"></section>
 </body>
+<div class="modal-dialog" th:include="gestion/gestionArchivo"></div>
 
-
-
-
-
-<!--SCRIPT PARA EL MAPA DE GOOGLE-->
 <script th:inline="javascript">
 	/*<![CDATA[*/
 	var rutaJs = /*[[${ruta}]]*/"ruta";

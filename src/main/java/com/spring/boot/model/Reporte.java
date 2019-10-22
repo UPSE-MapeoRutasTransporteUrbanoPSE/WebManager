@@ -41,6 +41,7 @@ public class Reporte {
 	
 	public transient Integer orden;
 	public transient String nombreCooperativa;
+	public transient String fechaString;
 	
 	
 	
@@ -162,10 +163,19 @@ public class Reporte {
 		this.nombreCooperativa = nombreCooperativa;
 	}
 
+	
 
 
-	
-	
+
+	public String getFechaString() {
+		return fechaString;
+	}
+
+
+
+	public void setFechaString(String fechaString) {
+		this.fechaString = fechaString;
+	}
 
 
 

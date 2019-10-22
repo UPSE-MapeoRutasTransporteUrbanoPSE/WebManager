@@ -118,7 +118,8 @@
 								<div class="col-lg-6">
 									<input type="number" id="capacidad" name="capacidad"
 										th:value="${capacidad}" class="form-control" required
-										placeholder="Ej: 01" title="Ingrese capacidad" min="22" max="45"/>
+										placeholder="Ej: 01" title="Ingrese capacidad" min="22"
+										max="45" />
 								</div>
 							</div>
 
@@ -134,20 +135,18 @@
 									</select>
 								</div>
 							</div>
-
-							<div class="modal-footer">
-								<a href="#" th:href="@{/bus/limpiaIdBus}" style="color: black">
-									<button type="button" class="btn btn-secondary">
-										<span class="glyphicon glyphicon-remove" aria-hidden="true"
-											style="color: red"></span> <b>SALIR</b>
-									</button>
-								</a>
-								<button type="submit" class="btn btn-primary" id="myBtn">
-									<span class="glyphicon glyphicon-floppy-disk"
-										aria-hidden="true"></span> GUARDAR
+						</div>
+						<div class="modal-footer">
+							<a href="#" th:href="@{/bus/limpiaIdBus}" style="color: black">
+								<button type="button" class="btn btn-secondary">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"
+										style="color: red"></span> <b>SALIR</b>
 								</button>
-							</div>
-
+							</a>
+							<button type="submit" class="btn btn-primary" id="myBtn">
+								<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+								GUARDAR
+							</button>
 						</div>
 
 					</div>
@@ -155,10 +154,8 @@
 			</div>
 		</form>
 	</div>
-
 </body>
-
-<div class="modal-dialog" th:include="/gestion/gestionArchivo"></div>
+<div class="modal-dialog" th:include="gestion/gestionArchivo"></div>
 
 <script th:inline="javascript">
 	$('.eBtn5').on('click',function(event){
@@ -181,27 +178,17 @@
 		        return false;
 		      }
 		    });
-		});
 	
-	$(document).ready(function () {
 		  $('input#capacidad')
 		    .keypress(function (event) {
 		      if (event.which < 48 || event.which > 57 || this.value.length === 2) {
 		        return false;
 		      }
-		    });
-		});
-	
-	$(document).ready(function(){
-		
-	    
+		    });	
+		    
 	    $("#myBtn").submit(function(){
 	        $("#miModalBus").modal("hide");
-	    });
-	    $("#miModalBus").on('hidden.bs.modal', function () {
-	            alert("PROCESO EJECUTADO CON EXITO...!!")
-	    });
-
+	    });  
 	});
 </script>
 </html>

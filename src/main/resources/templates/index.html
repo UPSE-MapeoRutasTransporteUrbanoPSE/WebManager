@@ -7,8 +7,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
 <title>BIENVENIDO(A)</title>
-
 
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -25,22 +25,19 @@
 
 </head>
 
-<!-- CUERPO DE LA PAGINA PRINCIPAL -->
 <body style="overflow-y: hidden; overflow-x: hidden;">
 
 	<nav class="navbar navbar-inverse" th:include="menu"
 		th:fragment="menuPag"></nav>
-	<!--MENU-->
-	
+
 	<div align="center">
-    <img th:src="@{/imgs/logoBuses.png}" width="50%"  height="50%" 
-         src="../imgs/logoBuses.png" class="img-responsive" alt="Responsive image"/>
-</div>
+		<img th:src="@{/imgs/logoBuses.png}" width="50%" height="50%"
+			src="../imgs/logoBuses.png" class="img-responsive"
+			alt="Responsive image" />
+	</div>
 	<!--CONTENIDO-->
 	<!--<footer class="footer" th:include="footer"> </footer>-->
 	<!--PIE DE PAGINA-->
 </body>
-
-<!-- MOSTRAR MODALES DESDE EL MENU -->
-<div class="modal-dialog" th:include="/gestion/gestionArchivo" style="display: none"></div>
+<div class="modal-dialog" th:include="gestion/gestionArchivo"></div>
 </html>

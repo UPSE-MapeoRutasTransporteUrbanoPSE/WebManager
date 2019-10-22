@@ -2,18 +2,8 @@
 spring: 
   banner: 
     location: classpath:/banner/bannerRutasSantaElena.txt
-# PARA DEFINIR LA RUTA DE LOS ARCHIVOS PRINCIPAL
+# PARA DEFINIR LA RUTA DE LOS HTML
   thymeleaf:
     prefix: classpath:/templates/
-# HABILITA LA CARGA MULTIPLE DE ARCHIVOS
-  servlet: 
-    multipart:
-      enabled: true
-# LIMITE DEL CUAL SE ESCRIBEN LOS ARCHIVOS
-      file-size-threshold: 1MB
-# TAMAÑO MAXIMO DEL ARCHIVO
-      max-file-size: 3000KB
-# TAMAÑO MAXIMO DE SOLICITUD
-      max-request-size: 215MB
-# PARA RESOLVER LA SOLICITUD EN EL MOMENTO DE ACCESO AL ARCHIVO O PARAMETRO
-      resolve-lazily: false 
+    #PARA CONFIGURAR EL PUERTO DONDE INCIARA LA APLICACION
+server:  port: 8080
